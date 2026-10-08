@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jhans ❤️ Tatiana</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#fff1f5,#ffe0ea);
+  color:#3b1f28;display:flex;justify-content:center;align-items:center;padding:18px
+}
+.container{width:100%;max-width:520px}
+.card{
+  background:#fff;border-radius:25px;padding:28px 22px;
+  box-shadow:0 12px 35px rgba(120,30,60,.15);text-align:center
+}
+.heart{font-size:54px;animation:pulse 1.5s infinite}
+h1{margin:8px 0 4px;font-size:30px}
+.subtitle{color:#8b5263;margin:0 0 22px}
+.progress{font-size:14px;color:#8b5263;margin-bottom:12px}
+.question{font-size:20px;font-weight:bold;line-height:1.4;margin:16px 0}
+.option{
+  width:100%;padding:14px 15px;margin:8px 0;border:2px solid #f0c8d4;
+  border-radius:14px;background:#fff;color:#3b1f28;text-align:left;
+  font-size:16px;cursor:pointer
+}
+.option.selected{background:#ffe0ea;border-color:#d94f78}
+.btn{
+  width:100%;padding:15px;margin-top:14px;border:0;border-radius:14px;
+  background:#d94f78;color:#fff;font-size:17px;font-weight:bold;cursor:pointer
+}
+.btn.secondary{background:#7d5361}
+.hidden{display:none}
+.result h2{font-size:27px;margin:10px 0}
+.code{
+  font-size:27px;font-weight:bold;letter-spacing:5px;
+  background:#fff1f5;padding:15px;border-radius:14px;margin:18px 0
+}
+.note{font-size:14px;color:#76515d;line-height:1.5}
+@keyframes pulse{50%{transform:scale(1.1)}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="card">
+  <div class="heart">❤️</div>
+  <h1>Jhans ❤️ Tatiana</h1>
+  <p class="subtitle">Te amo</p>
+
+  <section id="inicio">
+    <p>Un pequeño juego para conocernos mejor y descubrir cuánto coincidimos.</p>
+    <button class="btn" id="comenzar">Comenzar</button>
+  </section>
+
+  <section id="juego" class="hidden">
+    <div class="progress" id="progreso"></div>
+    <div class="question" id="pregunta"></div>
+    <div id="opciones"></div>
+    <button class="btn" id="siguiente">Siguiente</button>
+  </section>
+
+  <section id="resultado" class="result hidden"></section>
+</div>
+</div>
+
+<script>
+const preguntas = [
+  ["¿Qué valoras más en una relación?",["La confianza","El cariño","La comunicación","El tiempo juntos"]],
+  ["¿Qué detalle te hace sentir más querido/a?",["Un mensaje bonito","Un abrazo","Que me escuchen","Una sorpresa"]],
+  ["¿Qué prefieres hacer juntos?",["Salir a pasear","Ver una película","Comer juntos","Conversar"]],
+  ["Cuando tenemos un problema, ¿qué es más importante?",["Hablar con calma","Escucharnos","Entendernos","Buscar una solución"]],
+  ["¿Qué recuerdo juntos guardarías para siempre?",["Una salida","Una conversación","Un momento divertido","Un momento especial"]],
+  ["¿Qué palabra representa mejor nuestro vínculo?",["Amor","Confianza","Respeto","Compañerismo"]],
+  ["¿Qué esperas de nosotros en el futuro?",["Seguir juntos","Crear más recuerdos","Apoyarnos siempre","Crecer juntos"]],
+  ["Completa: “Jhans y Tatiana…”",["Se quieren mucho","Siempre se apoyan","Tienen una historia especial","Todas las anteriores"]]
+];
+
+let indice=0;
+let respuestas=[];
+
+const inicio=document.getElementById("inicio");
+const juego=document.getElementById("juego");
+const resultado=document.getElementById("resultado");
+const progreso=document.getElementById("progreso");
+const pregunta=document.getElementById("pregunta");
+const opciones=document.getElementById("opciones");
+const siguiente=document.getElementById("siguiente");
+
+document.getElementById("comenzar").onclick=()=>{
+  inicio.classList.add("hidden");
+  juego.classList.remove("hidden");
+  mostrarPregunta();
+};
+
+function mostrarPregunta(){
+  progreso.textContent=`Pregunta ${indice+1} de ${preguntas.length}`;
+  pregunta.textContent=preguntas[indice][0];
+  opciones.innerHTML="";
+  preguntas[indice][1].forEach((texto,n)=>{
+    const boton=document.createElement("button");
+    boton.className="option";
+    boton.textContent=texto;
+    boton.onclick=()=>{
+      respuestas[indice]=n;
+      document.querySelectorAll(".option").forEach(b=>b.classList.remove("selected"));
+      boton.classList.add("selected");
+    };
+    opciones.appendChild(boton);
+  });
+  siguiente.textContent=indice===preguntas.length-1?"Terminar":"Siguiente";
+}
+
+siguiente.onclick=()=>{
+  if(respuestas[indice]===undefined){
+    alert("Elige una respuesta para continuar ❤️");
+    return;
+  }
+
+  if(indice<preguntas.length-1){
+    indice++;
+    mostrarPregunta();
+  }else{
+    mostrarResultado();
+  }
+};
+
+function mostrarResultado(){
+  juego.classList.add("hidden");
+  resultado.classList.remove("hidden");
+
+  const codigo=respuestas.map(n=>String.fromCharCode(65+n)).join("");
+
+  resultado.innerHTML=`
+    <div class="heart">❤️</div>
+    <h2>Jhans ❤️ Tatiana</h2>
+    <p><strong>Te amo</strong></p>
+    <p>Gracias por responder este pequeño juego.</p>
+    <div class="code">${codigo}</div>
+    <p>Este es tu código de respuestas. Mándaselo a Jhans para que puedan comparar sus respuestas.</p>
+    <p class="note">Este juego es solo una forma divertida de conocerse mejor. El amor se demuestra con confianza, respeto, comunicación y acciones.</p>
+    <button class="btn secondary" onclick="location.reload()">Volver a jugar</button>
+  `;
+}
+</script>
+</body>
+</html>
