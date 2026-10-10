@@ -1,0 +1,8 @@
+body {
+  background:
+    linear-gradient(
+      rgba(50, 12, 37, 0.25),
+      rgba(50, 12, 37, 0.35)
+    ),
+    url("fondo.jpg") center center / cover fixed no-repeat;
+}
